@@ -5,6 +5,7 @@ import { useStoreStore } from '@/stores/store'
 import { useCartStore } from '@/stores/cart'
 import { storeToRefs } from 'pinia'
 import ShoppingCart from '@/components/ShoppingCart.vue'
+import type { Product } from '@/stores/product' // Importamos el tipo Product
 
 const route = useRoute()
 const storeStore = useStoreStore()
@@ -18,6 +19,11 @@ onMounted(() => {
     storeStore.fetchStoreBySlug(storeSlug)
   }
 })
+
+// Función para manejar la adición de productos al carrito
+const handleAddToCart = (product: Product) => {
+  cartStore.addProduct(product)
+}
 </script>
 
 <template>
@@ -93,26 +99,29 @@ onMounted(() => {
           <h2 class="text-center text-4xl font-bold mb-12">Nuestra Colección</h2>
           <div
             v-if="storeInfo.products.length > 0"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
           >
             <div
               v-for="product in storeInfo.products"
               :key="product._id"
-              class="group relative bg-black rounded-lg shadow-lg overflow-hidden border border-transparent hover:border-yellow-400 transition-all duration-300"
+              class="bg-black rounded-lg shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300"
             >
-              <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
-                <img
-                  :src="
-                    product.imageUrl || 'https://placehold.co/600x600/1a1a1a/eab308?text=Estilo'
-                  "
-                  :alt="product.name"
-                  class="w-full h-full object-cover object-center"
-                />
+              <div class="relative">
+                <!-- LA CORRECCIÓN ESTÁ AQUÍ: Contenedor con ratio de aspecto cuadrado -->
+                <div class="aspect-square w-full bg-gray-800">
+                  <img
+                    :src="
+                      product.imageUrl || 'https://placehold.co/600x600/1a1a1a/eab308?text=Estilo'
+                    "
+                    :alt="product.name"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
                 <div
-                  class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 >
                   <button
-                    @click="cartStore.addProduct(product)"
+                    @click="handleAddToCart(product)"
                     class="bg-yellow-400 text-gray-900 font-bold py-3 px-6 rounded-lg transform hover:scale-105 transition-transform"
                   >
                     Añadir al Carrito
@@ -120,11 +129,11 @@ onMounted(() => {
                 </div>
               </div>
               <div class="p-6">
-                <h3 class="text-lg font-semibold text-white">{{ product.name }}</h3>
+                <h3 class="text-lg font-semibold text-white truncate">{{ product.name }}</h3>
                 <p class="mt-1 text-sm text-gray-400 h-10 overflow-hidden">
                   {{ product.description }}
                 </p>
-                <p class="mt-4 text-2xl font-bold text-yellow-400">
+                <p class="mt-4 text-2xl font-bold text-yellow-400 text-right">
                   ${{ product.price.toFixed(2) }}
                 </p>
               </div>
@@ -144,11 +153,8 @@ onMounted(() => {
         </p>
       </footer>
 
-      <ShoppingCart
-        v-if="storeInfo"
-        :store-name="storeInfo.storeName"
-        :phone-number="storeInfo.phoneNumber"
-      />
+      <!-- Carrito de Compras -->
+      <ShoppingCart v-if="storeInfo" :phone-number="storeInfo.phoneNumber" />
     </div>
   </div>
 </template>
