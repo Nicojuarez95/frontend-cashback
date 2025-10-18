@@ -2,27 +2,30 @@
 import { ref, watch } from 'vue'
 import type { Client } from '@/stores/client'
 
-// Definimos los props que el componente puede recibir
 const props = defineProps<{
   isOpen: boolean
-  client?: Client | null // El cliente a editar (opcional)
+  client?: Client | null
 }>()
 
-// Definimos los eventos que el componente puede emitir
 const emit = defineEmits(['close', 'save'])
 
-// Estado local para los campos del formulario
+// El estado del formulario debe coincidir con los tipos que puede recibir.
 const form = ref({
   name: '',
-  phone: '',
+  phone: '', // Lo inicializamos como string vacío
 })
 
-// Observamos cambios en el prop 'client' para pre-rellenar el formulario
 watch(
   () => props.client,
   (newClient) => {
     if (newClient) {
-      form.value = { ...newClient }
+      // LA CORRECCIÓN CLAVE:
+      // Nos aseguramos de que 'phone' siempre sea un string.
+      // Si newClient.phone es undefined, usamos un string vacío en su lugar.
+      form.value = {
+        name: newClient.name,
+        phone: newClient.phone || '',
+      }
     } else {
       // Si no hay cliente, reseteamos el formulario
       form.value = { name: '', phone: '' }
@@ -31,7 +34,6 @@ watch(
 )
 
 const handleSubmit = () => {
-  // Validamos que el nombre no esté vacío
   if (form.value.name.trim()) {
     emit('save', { ...form.value })
   }
@@ -60,7 +62,7 @@ const handleSubmit = () => {
             type="text"
             id="name"
             v-model="form.name"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             required
           />
         </div>
@@ -72,7 +74,7 @@ const handleSubmit = () => {
             type="text"
             id="phone"
             v-model="form.phone"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
           />
         </div>
 
@@ -80,13 +82,13 @@ const handleSubmit = () => {
           <button
             type="button"
             @click="$emit('close')"
-            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Guardar
           </button>
