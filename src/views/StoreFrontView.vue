@@ -153,7 +153,6 @@ const handleAddToCart = (product: Product) => {
         </p>
       </footer>
 
-      <!-- Carrito de Compras -->
       <ShoppingCart v-if="storeInfo" :phone-number="storeInfo.phoneNumber" />
     </div>
   </div>
