@@ -149,7 +149,7 @@ const handleAddToCart = (product: Product) => {
       <footer class="text-center mt-24 pt-8 border-t border-gray-800">
         <p class="text-gray-500">
           &copy; {{ new Date().getFullYear() }} {{ storeInfo?.storeName || 'Cashback App' }}. Todos
-          los derechos reservados.
+          los derechos reservados. Hecho por NICOLAS JUAREZ
         </p>
       </footer>
 
