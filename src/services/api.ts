@@ -3,7 +3,7 @@ import axios from 'axios'
 // 1. Creamos una instancia de Axios con la configuración base.
 const api = axios.create({
   // Asegúrate de que esta URL coincida con la de tu backend.
-  baseURL: 'http://localhost:8000/api', // Reemplaza el puerto si es diferente
+  baseURL: 'https://backend-cashback-bbpy.onrender.com', // Reemplaza el puerto si es diferente
   headers: {
     'Content-Type': 'application/json',
   },

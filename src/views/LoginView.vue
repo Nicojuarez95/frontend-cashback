@@ -24,7 +24,7 @@ const handleLogin = async () => {
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
       <div>
-        <h2 class="text-3xl font-extrabold text-center text-gray-900">Iniciar sss Sesión</h2>
+        <h2 class="text-3xl font-extrabold text-center text-gray-900">Iniciar Sesión</h2>
         <p class="mt-2 text-center text-sm text-gray-600">Accede a tu panel de administración</p>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
